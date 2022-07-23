@@ -1,0 +1,17 @@
+#!/bin/bash
+# Trivial script to create new certificates for every active server on this machine.
+
+SERVER_NAMES=
+for FILE in /etc/nginx/sites-enabled/*;
+do
+  SERVER_NAME=`egrep -e '^\s*server_name\s' $FILE | sed -e 's/\s*server_name\s\s*//' -e 's/\s*;\s*$//'` 
+  SERVER_NAMES="${SERVER_NAMES} $SERVER_NAME"
+done
+
+COMMAND_LINE="--nginx"
+for SERVER_NAME in ${SERVER_NAMES};
+do
+  COMMAND_LINE="${COMMAND_LINE} -d ${SERVER_NAME}"
+done
+
+certbot ${COMMAND_LINE}

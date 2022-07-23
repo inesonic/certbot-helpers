@@ -1,23 +1,30 @@
-======================
-certbot-helpers-apache
-======================
+===============
+certbot-helpers
+===============
 This respository contains a small collection of shell scripts and Python scrips
-you an use to further automate the use of certbot with Apache.
+you an use to further automate the use of certbot with Apache or NGINX.
 
 Note that you need to install the following package (on Ubuntu) to use these
 tools:
 
 * certbot
-* python3-certbot-apache
+* python3-certbot-apache and/or python3-certbot-nginx
 
 The provides files should be copied into /etc/letsencrypt/ prior to use.
 Alternately, you can place them in other locations provided you update
 ``renew_certificates.service`` to point to the files in the new location.
 
 
-create_certificate
-==================
+create_certificate.apache
+=========================
 This small script will scan your Apache2 configuration identifying virtual
+hosts on your system.  The script will then run certbot to obtain a certificate
+that can be used with those hosts.
+
+
+create_certificate.nginx
+========================
+This small script will scan your NGINX configuration identifying virtual
 hosts on your system.  The script will then run certbot to obtain a certificate
 that can be used with those hosts.
 
