@@ -1,0 +1,3 @@
+#!/bin/bash
+# Trivial script that renews certificates.
+certbot renew

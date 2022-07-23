@@ -1,0 +1,13 @@
+[Unit]
+Description=CERTBOT Certificate Renewal Service
+After=network.target auditd.service nginx.service
+ConditionPathExists=/etc/letsencrypt/renew_certificates.py
+
+[Service]
+ExecStart=/etc/letsencrypt/renew_certificates.py
+Restart=on-failure
+Type=simple
+StandardOutput=journal
+
+[Install]
+WantedBy=multi-user.target

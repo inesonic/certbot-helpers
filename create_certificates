@@ -1,0 +1,26 @@
+#!/bin/bash
+# Trivial script to create new certificates for every active server on this machine.
+
+SERVER_NAMES=
+for FILE in /etc/apache2/sites-enabled/*;
+do
+  SERVER_NAME=`egrep -e '^\s*Server(Name|Alias)\s' $FILE | sed -e 's/\s*ServerName\s\s*//' -e 's/\s*ServerAlias\s\s*//'`
+  SERVER_NAMES="${SERVER_NAMES} $SERVER_NAME"
+done
+
+SERVER_NAMES_WITH_LENGTH=""
+for SERVER_NAME in ${SERVER_NAMES};
+do
+  SERVER_NAME_LENGTH=$(expr length "${SERVER_NAME}")
+  SERVER_NAMES_WITH_LENGTH="${SERVER_NAMES_WITH_LENGTH} ${SERVER_NAME_LENGTH}-${SERVER_NAME}"  
+done
+
+COMMAND_LINE="--apache"
+
+for SERVER_NAME_WITH_LENGTH in `echo ${SERVER_NAMES_WITH_LENGTH} | tr " " "\n" | sort`;
+do
+  SERVER_NAME=$(echo "${SERVER_NAME_WITH_LENGTH}" | sed -e 's/^[0-9][0-9]*-//')
+  COMMAND_LINE="${COMMAND_LINE} -d ${SERVER_NAME}"
+done
+
+certbot ${COMMAND_LINE}
